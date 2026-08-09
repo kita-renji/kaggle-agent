@@ -22,9 +22,11 @@ metadata:
 
 ## Purpose
 
-Use this skill for Kaggle competition work: context gathering, writeups, discussions, kernels, local reproduction, submission, and dataset upload.
+Use this skill for Kaggle competition work: context gathering, writeups, discussions, kernels, remote kernel execution, submission, and dataset upload.
 
 Do not use it for unrelated ML training, generic notebook editing, general data analysis, or non-Kaggle dataset management unless the user explicitly ties the task to Kaggle.
+
+This environment has no local GPU or cluster. All training, heavy inference, and large data processing must run on Kaggle compute via the Remote Run workflow — never locally. Do not download full competition datasets locally; only quick CPU sanity checks (syntax, imports, tiny-sample dry runs) run on the local machine.
 
 ## Inputs
 
@@ -128,6 +130,16 @@ Use this when the user asks to ingest, query, or read kernels; research top publ
 
 Use this when the user asks to download and reproduce a Kaggle notebook locally with its inputs. Read `./kernel-setup.md`.
 
+Caution in this environment: use it mainly to pull kernel code and metadata for reading. Pass `skip-competition` and skip large dataset/model downloads — reproduction runs happen on Kaggle via Remote Run, not locally.
+
+### Remote Run
+
+Use this when code needs to execute on Kaggle compute: training, GPU inference, or any run too heavy for the local machine. Develop locally, push as a kernel, run remotely, and fetch the log and outputs back. Read `./remote-run.md`.
+
+```bash
+PYTHONUNBUFFERED=1 python ./scripts/run_kernel.py <kernel-folder> [--output DIR] [--log-tail N] [--no-download]
+```
+
 ### Submission
 
 Use this when the user asks to push, poll, or submit a Kaggle kernel to a competition. Read `./submission.md`.
@@ -152,6 +164,7 @@ Defaults:
 - Competition detail scripts print cleaned text that can be saved as markdown.
 - Discussion scripts write/read `data/discussions.db` and print tables, JSON, or rendered threads.
 - Dataset upload writes `dataset-metadata.json` in the data folder and prints the Kaggle dataset URL.
+- Remote run downloads kernel output files and the run log into `<kernel-folder>/output/` (or `--output DIR`).
 - Referenced workflows may write markdown reports, notebook caches, local kernel workspaces, or submission logs as described in their markdown files.
 
 ## Troubleshooting
