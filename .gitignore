@@ -34,6 +34,11 @@ data/
 rapids-svd-oof-0-80/
 titanic-wcg-xgboost-0-84688/
 
+# Autonomous loop workspaces: decisions and kernel code are tracked, bulk
+# outputs and the human kill switch are not.
+competitions/*/kernels/*/output/
+competitions/*/HALT
+
 # Editor / OS
 .idea/
 .vscode/

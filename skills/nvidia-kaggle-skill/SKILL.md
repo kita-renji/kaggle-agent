@@ -140,6 +140,29 @@ Use this when code needs to execute on Kaggle compute: training, GPU inference, 
 PYTHONUNBUFFERED=1 python ./scripts/run_kernel.py <kernel-folder> [--output DIR] [--log-tail N] [--no-download]
 ```
 
+### Autonomous Loop
+
+Use this when the user wants the agent to work a competition unattended: research, run experiments,
+judge results, submit, and iterate across many ticks. One `/loop` session per competition. Read
+`./agent-loop.md` for the tick contract, `./agent-hypotheses.md` for how to form hypotheses, and
+`./agent-analysis.md` for how to read a finished run.
+
+```bash
+python ./scripts/agent_init.py [slug]                        # scaffold; infers metric + direction
+python ./scripts/agent_state.py [slug] --as-json --write-state   # sense + next phase
+python ./scripts/agent_run.py launch <kernel-folder> [--competition <slug>] [--dry-run]
+python ./scripts/agent_submit.py [slug] --run-id <id> [--dry-run]
+```
+
+The slug is optional in every script: it defaults to the current directory's name, or to `<slug>`
+when run from anywhere inside `competitions/<slug>/`.
+
+The user drives the loop with `/kaggle-agent start [slug]`, which scaffolds and then hands off to
+`/loop /kaggle-tick <slug>`; `/kaggle-agent stop` writes the HALT file. Submission and GPU budgets
+are enforced in Python — at most 3 submissions/day per competition with 2 reserved for the human,
+and a per-competition weekly GPU slice under a 26h account-wide guard shared by every concurrent
+loop.
+
 ### Submission
 
 Use this when the user asks to push, poll, or submit a Kaggle kernel to a competition. Read `./submission.md`.
@@ -165,6 +188,7 @@ Defaults:
 - Discussion scripts write/read `data/discussions.db` and print tables, JSON, or rendered threads.
 - Dataset upload writes `dataset-metadata.json` in the data folder and prints the Kaggle dataset URL.
 - Remote run downloads kernel output files and the run log into `<kernel-folder>/output/` (or `--output DIR`).
+- The autonomous loop keeps per-competition state in `competitions/<slug>/` (`MISSION.md`, `STATE.md`, `backlog.md`, `journal.md`, `runs.jsonl`, `budget.jsonl`, `research/`, `kernels/`) and shared state in `data/agent/` (`gpu_usage.jsonl`, downloaded run outputs).
 - Referenced workflows may write markdown reports, notebook caches, local kernel workspaces, or submission logs as described in their markdown files.
 
 ## Troubleshooting

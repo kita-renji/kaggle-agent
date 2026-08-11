@@ -66,6 +66,19 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture
+def agent_workspace(tmp_path, monkeypatch):
+    """Redirect the autonomous loop's whole workspace into tmp_path.
+
+    ``runtime.find_project_root`` reads PROJECT_ROOT on every call, so setting
+    it is enough to relocate competitions/, data/agent/, and the shared
+    ledgers — no monkeypatching of the agent modules themselves.
+    """
+    monkeypatch.setenv("PROJECT_ROOT", str(tmp_path))
+    monkeypatch.setenv("KAGGLE_AGENT_SESSION", "test-session")
+    return tmp_path
+
+
+@pytest.fixture
 def kaggle_api_token():
     """Return KAGGLE_API_TOKEN from env, skip test if missing."""
     token = os.environ.get("KAGGLE_API_TOKEN")
