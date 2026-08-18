@@ -15,9 +15,11 @@ from dotenv import load_dotenv
 load_dotenv()
 ROOT = Path(__file__).resolve().parent.parent
 SKILL_SCRIPTS = ROOT / "skills" / "nvidia-kaggle-skill" / "scripts"
+AGENT_SKILL_SCRIPTS = ROOT / "skills" / "kaggle-agent" / "scripts"
 
-if str(SKILL_SCRIPTS) not in sys.path:
-    sys.path.insert(0, str(SKILL_SCRIPTS))
+for _scripts in (SKILL_SCRIPTS, AGENT_SKILL_SCRIPTS):
+    if str(_scripts) not in sys.path:
+        sys.path.insert(0, str(_scripts))
 
 
 def pytest_addoption(parser):

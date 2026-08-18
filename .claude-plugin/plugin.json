@@ -3,6 +3,7 @@
   "description": "Claude Code plugin for Kaggle competition workflows.",
   "license": "MIT",
   "skills": [
-    "./skills/nvidia-kaggle-skill/"
+    "./skills/nvidia-kaggle-skill/",
+    "./skills/kaggle-agent/"
   ]
 }

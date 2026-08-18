@@ -10,14 +10,14 @@ Fork of the NVIDIA Kaggle Plugin, customized for an environment **without local 
 
 ## Primary workflow
 
-The skill lives in `skills/nvidia-kaggle-skill/`. For running code, use the **Remote Run** workflow (`skills/nvidia-kaggle-skill/remote-run.md`):
+Two skills work together: `skills/nvidia-kaggle-skill/` (upstream, untouched — research, submission, dataset workflows) and `skills/kaggle-agent/` (this fork's additions — remote execution and the autonomous loop). For running code, use the **Remote Run** workflow (`skills/kaggle-agent/remote-run.md`):
 
 1. Develop code locally in a kernel folder (`kernel-metadata.json` + code file).
-2. `python scripts/run_kernel.py <kernel-folder>` — pushes, runs on Kaggle, downloads outputs and run log.
+2. `python skills/kaggle-agent/scripts/run_kernel.py <kernel-folder>` — pushes, runs on Kaggle, downloads outputs and run log.
 3. Read the log, fix locally, push again.
-4. Submit with `scripts/submit_kernel.py` (see `submission.md`) only after a clean run, and check quota first (`submission_quota.py`).
+4. Submit with the base skill's `submit_kernel.py` (see `skills/nvidia-kaggle-skill/submission.md`) only after a clean run, and check quota first (`submission_quota.py`).
 
-Ship multi-file code to kernels as a Kaggle dataset (`scripts/upload_dataset.py`) attached via `dataset_sources`, or chain kernels via `kernel_sources`.
+Ship multi-file code to kernels as a Kaggle dataset (the base skill's `upload_dataset.py`) attached via `dataset_sources`, or chain kernels via `kernel_sources`.
 
 ## Autonomous loop
 
@@ -33,7 +33,7 @@ The slug is optional: run from inside `competitions/<slug>/` and it comes from t
 `start` infers the metric, optimisation direction, and deadline from Kaggle — no hand-editing
 needed before the first tick, though BOOTSTRAP verifies them against the Evaluation page.
 
-- Contract: `skills/nvidia-kaggle-skill/agent-loop.md`. Each tick senses with `agent_state.py`,
+- Contract: `skills/kaggle-agent/agent-loop.md`. Each tick senses with `agent_state.py`,
   runs the one phase it names, writes state, and sleeps. Nothing blocks on a Kaggle run.
 - State: `competitions/<slug>/` (mission, backlog, journal, `runs.jsonl`, `budget.jsonl`, research,
   kernel code) plus shared `data/agent/`. Kernel outputs and `HALT` are gitignored; the rest is

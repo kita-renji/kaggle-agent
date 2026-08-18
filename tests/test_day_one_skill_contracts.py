@@ -11,6 +11,8 @@ from runtime import competition_slug, kernel_ref
 ROOT = Path(__file__).resolve().parent.parent
 SKILL_NAME = "nvidia-kaggle-skill"
 SKILL_DIR = ROOT / "skills" / SKILL_NAME
+FORK_SKILL_NAME = "kaggle-agent"
+FORK_SKILL_DIR = ROOT / "skills" / FORK_SKILL_NAME
 
 CAPABILITY_DOCS = [
     "writeups.md",
@@ -42,15 +44,17 @@ def _frontmatter_name(skill_md: str) -> str:
 def test_unified_skill_directory_is_hyphenated_and_self_named():
     skill_dirs = sorted(path.name for path in (ROOT / "skills").iterdir() if path.is_dir())
 
-    assert skill_dirs == [SKILL_NAME]
+    assert skill_dirs == sorted([SKILL_NAME, FORK_SKILL_NAME])
     assert "_" not in SKILL_NAME
     skill_md = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
     assert _frontmatter_name(skill_md) == SKILL_NAME
+    fork_skill_md = (FORK_SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    assert _frontmatter_name(fork_skill_md) == FORK_SKILL_NAME
 
 
 def test_plugin_manifest_includes_only_unified_skill_path():
     manifest = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text())
-    assert manifest["skills"] == [f"./skills/{SKILL_NAME}/"]
+    assert manifest["skills"] == [f"./skills/{SKILL_NAME}/", f"./skills/{FORK_SKILL_NAME}/"]
 
 
 def test_unified_skill_documents_contract_and_runtime_compatibility():

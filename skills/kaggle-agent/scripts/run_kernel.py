@@ -15,8 +15,12 @@ Usage:
 import argparse
 import os
 import sys
+from pathlib import Path
 
-from constants import (
+# constants and submit_kernel live in the sibling base skill.
+sys.path.append(str(Path(__file__).resolve().parents[2] / "nvidia-kaggle-skill" / "scripts"))
+
+from constants import (  # noqa: E402
     DEFAULT_KERNEL_TIMEOUT_SECONDS,
     DEFAULT_POLL_INTERVAL_SECONDS,
     OUTPUT_SEPARATOR_WIDTH,

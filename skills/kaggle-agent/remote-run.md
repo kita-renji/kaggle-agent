@@ -22,7 +22,7 @@ python ./scripts/run_kernel.py <kernel-folder> --no-download
 
 3. Read the downloaded log (`<output-dir>/<kernel-slug>.log`), diagnose, edit, repeat.
 
-The script pushes the kernel, polls until the run finishes, then downloads all output files plus the run log into `<kernel-folder>/output/` (or `--output DIR`) and prints the log tail. It never submits to a competition — use `submit_kernel.py` (see [submission.md](submission.md)) once a run produces a valid submission file.
+The script pushes the kernel, polls until the run finishes, then downloads all output files plus the run log into `<kernel-folder>/output/` (or `--output DIR`) and prints the log tail. It never submits to a competition — use the base skill's `submit_kernel.py` (see [submission.md](../nvidia-kaggle-skill/submission.md)) once a run produces a valid submission file.
 
 Run long kernels in the background with unbuffered output. If the poll times out, the kernel keeps running on Kaggle; fetch results later with `kaggle kernels output <owner>/<slug> -p <dir>`.
 

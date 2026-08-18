@@ -17,7 +17,7 @@ directory. Stop by creating `competitions/<slug>/HALT`, or let a stop condition 
 ## The tick
 
 ```
-1. SENSE     python skills/nvidia-kaggle-skill/scripts/agent_state.py <slug> --as-json --write-state
+1. SENSE     python skills/kaggle-agent/scripts/agent_state.py <slug> --as-json --write-state
 2. Read the ONE phase named by next_phase. Do that phase. Nothing else.
 3. Rewrite STATE.md, append one journal block.
 4. ScheduleWakeup with wake_seconds, prompt "/kaggle-tick <slug>".
@@ -48,11 +48,12 @@ First match wins. Exactly one phase runs per tick.
 
 ### BOOTSTRAP
 
-Follow `research-brief.md` for how to gather and cite. Produce, in this order, checkpointing each
-file as you write it so a mid-phase interruption is not a total loss:
+Follow the base skill's `skills/nvidia-kaggle-skill/research-brief.md` for how to gather and cite.
+Produce, in this order, checkpointing each file as you write it so a mid-phase interruption is not
+a total loss:
 
 1. `research/overview.md` and `research/dataset.md` — from `fetch_competition_info.py` and
-   `fetch_dataset_info.py`.
+   `fetch_dataset_info.py` (in `skills/nvidia-kaggle-skill/scripts/`).
 2. `research/brief.md` — the strategy brief. Metric and its direction, submission format, data
    shape, what has actually scored well and where you read that, and a baseline → strong → top
    score ladder with each rung linked.
@@ -73,7 +74,7 @@ Read `agent-analysis.md`. In short: read `<output_dir>/metrics.json` first, the 
 Then append exactly one terminal event:
 
 ```bash
-python skills/nvidia-kaggle-skill/scripts/agent_run.py collect <slug> <run-id>   # if not already collected
+python skills/kaggle-agent/scripts/agent_run.py collect <slug> <run-id>   # if not already collected
 ```
 
 Record the verdict from Python, so the numbers in the ledger are the numbers you read:
@@ -95,7 +96,7 @@ under `## Retired` with its result.
 ### SUBMIT
 
 ```bash
-python skills/nvidia-kaggle-skill/scripts/agent_submit.py <slug> --run-id <run-id> --file submission.csv
+python skills/kaggle-agent/scripts/agent_submit.py <slug> --run-id <run-id> --file submission.csv
 ```
 
 It re-checks the budget against the live quota, reserves a slot, submits, and returns. **It does
@@ -117,7 +118,7 @@ Sanity-check locally — `python -m py_compile`, an import check, a tiny-sample 
 train locally and never download the competition data.** Then:
 
 ```bash
-python skills/nvidia-kaggle-skill/scripts/agent_run.py launch competitions/<slug>/kernels/<name> \
+python skills/kaggle-agent/scripts/agent_run.py launch competitions/<slug>/kernels/<name> \
     --competition <slug> --hypothesis H-005 --config-json '{"model":"lgbm","folds":5,"lr":0.03}' \
     --expected-runtime-min 40 [--estimated-hours 2.5]
 ```

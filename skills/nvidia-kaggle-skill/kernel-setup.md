@@ -4,12 +4,12 @@ Use this workflow to reproduce a public Kaggle kernel locally by downloading the
 
 ## Inputs
 
-| Input                                 | Required | Description                                       |
-| ------------------------------------- | -------- | ------------------------------------------------- |
-| Kernel URL or `owner/kernel-slug`     | Yes      | Source Kaggle notebook.                           |
-| Folder                                | No       | Defaults to the kernel slug.                      |
-| `skip-competition` flag               | No       | Skip competition data downloads.                  |
-| Kaggle CLI auth or `KAGGLE_API_TOKEN` | Yes      | Required for `kaggle kernels pull` and downloads. |
+| Input | Required | Description |
+|---|---|---|
+| Kernel URL or `owner/kernel-slug` | Yes | Source Kaggle notebook. |
+| Folder | No | Defaults to the kernel slug. |
+| `skip-competition` flag | No | Skip competition data downloads. |
+| Kaggle CLI auth or `KAGGLE_API_TOKEN` | Yes | Required for `kaggle kernels pull` and downloads. |
 
 ## Workspace
 
@@ -94,8 +94,8 @@ Write `{folder}/README.md` with:
 
 See [SKILL.md](SKILL.md#troubleshooting) for common credential, access, rate-limit, and disk-space failures.
 
-| Symptom                         | Action                                                                                                                          |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 403 on competition data         | Direct the user to accept rules at `https://www.kaggle.com/competitions/{competition}/rules`, then retry the specific download. |
-| 403 on dataset                  | Search with `kaggle datasets list -s "<name>"`; the owner may differ from the notebook metadata.                                |
-| Notebook paths cannot be mapped | Record the unresolved paths and uncertainty in the generated README.                                                            |
+| Symptom | Action |
+|---|---|
+| 403 on competition data | Direct the user to accept rules at `https://www.kaggle.com/competitions/{competition}/rules`, then retry the specific download. |
+| 403 on dataset | Search with `kaggle datasets list -s "<name>"`; the owner may differ from the notebook metadata. |
+| Notebook paths cannot be mapped | Record the unresolved paths and uncertainty in the generated README. |

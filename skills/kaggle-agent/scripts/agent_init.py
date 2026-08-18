@@ -18,8 +18,12 @@ Usage:
 
 import argparse
 import sys
+from pathlib import Path
 
-from runtime import load_project_env
+# runtime, submit_kernel, and submission_quota live in the sibling base skill.
+sys.path.append(str(Path(__file__).resolve().parents[2] / "nvidia-kaggle-skill" / "scripts"))
+
+from runtime import load_project_env  # noqa: E402
 
 load_project_env()
 

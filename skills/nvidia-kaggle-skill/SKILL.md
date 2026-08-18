@@ -22,11 +22,9 @@ metadata:
 
 ## Purpose
 
-Use this skill for Kaggle competition work: context gathering, writeups, discussions, kernels, remote kernel execution, submission, and dataset upload.
+Use this skill for Kaggle competition work: context gathering, writeups, discussions, kernels, local reproduction, submission, and dataset upload.
 
 Do not use it for unrelated ML training, generic notebook editing, general data analysis, or non-Kaggle dataset management unless the user explicitly ties the task to Kaggle.
-
-This environment has no local GPU or cluster. All training, heavy inference, and large data processing must run on Kaggle compute via the Remote Run workflow — never locally. Do not download full competition datasets locally; only quick CPU sanity checks (syntax, imports, tiny-sample dry runs) run on the local machine.
 
 ## Inputs
 
@@ -130,39 +128,6 @@ Use this when the user asks to ingest, query, or read kernels; research top publ
 
 Use this when the user asks to download and reproduce a Kaggle notebook locally with its inputs. Read `./kernel-setup.md`.
 
-Caution in this environment: use it mainly to pull kernel code and metadata for reading. Pass `skip-competition` and skip large dataset/model downloads — reproduction runs happen on Kaggle via Remote Run, not locally.
-
-### Remote Run
-
-Use this when code needs to execute on Kaggle compute: training, GPU inference, or any run too heavy for the local machine. Develop locally, push as a kernel, run remotely, and fetch the log and outputs back. Read `./remote-run.md`.
-
-```bash
-PYTHONUNBUFFERED=1 python ./scripts/run_kernel.py <kernel-folder> [--output DIR] [--log-tail N] [--no-download]
-```
-
-### Autonomous Loop
-
-Use this when the user wants the agent to work a competition unattended: research, run experiments,
-judge results, submit, and iterate across many ticks. One `/loop` session per competition. Read
-`./agent-loop.md` for the tick contract, `./agent-hypotheses.md` for how to form hypotheses, and
-`./agent-analysis.md` for how to read a finished run.
-
-```bash
-python ./scripts/agent_init.py [slug]                        # scaffold; infers metric + direction
-python ./scripts/agent_state.py [slug] --as-json --write-state   # sense + next phase
-python ./scripts/agent_run.py launch <kernel-folder> [--competition <slug>] [--dry-run]
-python ./scripts/agent_submit.py [slug] --run-id <id> [--dry-run]
-```
-
-The slug is optional in every script: it defaults to the current directory's name, or to `<slug>`
-when run from anywhere inside `competitions/<slug>/`.
-
-The user drives the loop with `/kaggle-agent start [slug]`, which scaffolds and then hands off to
-`/loop /kaggle-tick <slug>`; `/kaggle-agent stop` writes the HALT file. Submission and GPU budgets
-are enforced in Python — at most 3 submissions/day per competition with 2 reserved for the human,
-and a per-competition weekly GPU slice under a 26h account-wide guard shared by every concurrent
-loop.
-
 ### Submission
 
 Use this when the user asks to push, poll, or submit a Kaggle kernel to a competition. Read `./submission.md`.
@@ -187,8 +152,6 @@ Defaults:
 - Competition detail scripts print cleaned text that can be saved as markdown.
 - Discussion scripts write/read `data/discussions.db` and print tables, JSON, or rendered threads.
 - Dataset upload writes `dataset-metadata.json` in the data folder and prints the Kaggle dataset URL.
-- Remote run downloads kernel output files and the run log into `<kernel-folder>/output/` (or `--output DIR`).
-- The autonomous loop keeps per-competition state in `competitions/<slug>/` (`MISSION.md`, `STATE.md`, `backlog.md`, `journal.md`, `runs.jsonl`, `budget.jsonl`, `research/`, `kernels/`) and shared state in `data/agent/` (`gpu_usage.jsonl`, downloaded run outputs).
 - Referenced workflows may write markdown reports, notebook caches, local kernel workspaces, or submission logs as described in their markdown files.
 
 ## Troubleshooting

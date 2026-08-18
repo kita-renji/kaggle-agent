@@ -16,7 +16,7 @@ every script defaults to the current directory's name, or to `<slug>` when run f
    optimisation direction, and deadline from Kaggle:
 
    ```bash
-   python skills/nvidia-kaggle-skill/scripts/agent_init.py [slug]
+   python skills/kaggle-agent/scripts/agent_init.py [slug]
    ```
 
    Show the user the metric and direction it resolved, and where each came from. If direction was
@@ -44,7 +44,7 @@ If the loop is running in this session, it is also fine to end it immediately wi
 ## status
 
 ```bash
-python skills/nvidia-kaggle-skill/scripts/agent_state.py [slug] --offline
+python skills/kaggle-agent/scripts/agent_state.py [slug] --offline
 ```
 
 Print the rendered STATE.md. `--offline` keeps it free: no Kaggle calls, no quota check, no
